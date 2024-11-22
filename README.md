@@ -74,6 +74,31 @@ LazyClip comes with intuitive keybindings:
 
 ---
 
+## 📥 Backlog
+
+Planned features and improvements for future versions of LazyClip:
+
+#### Core Features
+
+- [ ] System Clipboard Integration.
+- [ ] Persistent Clipboard History.
+- [ ] Search Clipboard History
+- [ ] Clipboard Size Configuration
+
+#### UI Enhancements
+
+- [ ] Customizable Floating Window.
+- [ ] Highlight Current Item.
+- [ ] Multi-Item Paste.
+
+#### Quality of Life
+
+- [ ] Keybinding Configurability.
+- [ ] Better Error Messages.
+- [ ] Performance Optimization.
+
+---
+
 ## 📝 License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
