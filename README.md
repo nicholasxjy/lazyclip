@@ -1,4 +1,4 @@
-[![GitHub Releases](https://img.shields.io/github/downloads/atiladefreitas/lazyclip/total)](https://github.com/jesseduffield/lazygit/releases) [![GitHub tag](https://img.shields.io/github/tag/jesseduffield/lazygit.svg)](https://github.com/atiladefreitas/lazyclip/releases/latest)
+[![GitHub Releases](https://img.shields.io/github/downloads/atiladefreitas/lazyclip/total)](https://github.com/atiladefreitas/lazyclip/releases) [![GitHub tag](https://img.shields.io/github/tag/atiladefreitas/lazyclip.svg)](https://github.com/atiladefreitas/lazyclip/releases/latest)
 
 
 # LazyClip
