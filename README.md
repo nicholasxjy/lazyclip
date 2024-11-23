@@ -1,7 +1,7 @@
 
 <!-- badges: start -->
 [![GitHub license](https://badgen.net/github/license/atiladefreitas/lazyclip)](https://github.com/atiladefreitas/lazyclip/blob/main/LICENSE)
-[![GitHub tag](https://badgen.net/github/tag/atiladefreitas/lazyclip)](https://github.com/atiladefreitas/lazyclip/tags/)
+[![GitHub tag](https://badgen.net/github/tag/atiladefreitas/lazyclip?cache=clear)](https://github.com/atiladefreitas/lazyclip/tags/)
 <!-- badges: end -->
 
 
