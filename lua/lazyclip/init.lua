@@ -1,7 +1,6 @@
 local M = {}
 
 function M.setup(opts)
-	-- Allow user configuration
 	if opts then
 		local config = require("lazyclip.config")
 		config = vim.tbl_deep_extend("force", config, opts)
