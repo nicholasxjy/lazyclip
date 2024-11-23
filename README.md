@@ -9,6 +9,8 @@
 
 LazyClip is a powerful yet minimalist clipboard manager for Neovim, designed with simplicity and efficiency in mind. It integrates seamlessly with your Neovim setup and provides an intuitive floating window to browse and paste clipboard history. LazyClip is especially crafted for users of **Lazy.nvim** and works great with popular Neovim distributions.
 
+https://github.com/user-attachments/assets/80bcd017-0657-43f7-8f85-509f687eaad7
+
 ## 🚀 Features
 
 - 📋 View up to **9 clipboard items** per page in a **floating window**.
