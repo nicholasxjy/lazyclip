@@ -1,4 +1,8 @@
-[![GitHub Releases](https://img.shields.io/github/downloads/atiladefreitas/lazyclip/total)](https://github.com/atiladefreitas/lazyclip/releases) [![GitHub tag](https://img.shields.io/github/tag/atiladefreitas/lazyclip.svg)](https://github.com/atiladefreitas/lazyclip/releases/latest)
+
+<!-- badges: start -->
+[![GitHub license](https://badgen.net/github/license/atiladefreitas/lazyclip)](https://github.com/atiladefreitas/lazyclip/blob/main/LICENSE)
+[![GitHub tag](https://badgen.net/github/tag/atiladefreitas/lazyclip)](https://github.com/atiladefreitas/lazyclip/tags/)
+<!-- badges: end -->
 
 
 # LazyClip
