@@ -1,131 +1,137 @@
-local M = {}
+local State = require("lazyclip.state")
+local Config = require("lazyclip.config")
+local api = vim.api
+local notify = vim.notify
+local keymap = vim.keymap
+local log_levels = vim.log.levels
 
-local state = require("lazyclip.state")
+local UI = {}
 
-local ITEMS_PER_PAGE = 9
-local FLOAT_OPTS = {
-	relative = "editor",
-	width = 70,
-	height = 12,
-	col = math.floor((vim.o.columns - 70) / 2),
-	row = math.floor((vim.o.lines - 12) / 2),
-	border = "rounded",
-}
-
-local function sanitize_item(item)
-	return item:gsub("\n", " "):sub(1, 30)
+local function create_window_options()
+	local pos = Config.get_window_position()
+	return vim.tbl_extend("force", Config.window, pos)
 end
 
-local function render_content(buffer, start_idx)
-	vim.api.nvim_buf_set_lines(buffer, 0, -1, false, {}) -- Clear buffer
+local function sanitize_display_text(text)
+	return text:gsub("\n", " "):sub(1, 30)
+end
 
-	local clipboard = state.get_clipboard()
-	for i = 1, ITEMS_PER_PAGE do
-		local actual_idx = start_idx + i - 1
-		local content = clipboard[actual_idx] and sanitize_item(clipboard[actual_idx]) or ""
-		local line = string.format("[%d] - %s", i, content)
-		vim.api.nvim_buf_set_lines(buffer, i - 1, i, false, { line })
+local function create_display_line(index, content)
+	return string.format("[%d] - %s", index, sanitize_display_text(content))
+end
+
+local function render_content(bufnr)
+	local lines = {}
+
+	for i = 1, Config.items_per_page do
+		local item = State.get_item_at_index(i)
+		lines[i] = create_display_line(i, item or "")
 	end
 
-	local page_info = string.format("Page %d", state.get_current_page())
-	vim.api.nvim_buf_set_lines(buffer, ITEMS_PER_PAGE, ITEMS_PER_PAGE + 1, false, { "", page_info })
+	-- Add page info with total pages
+	lines[#lines + 1] = ""
+	lines[#lines + 1] = string.format("Page %d/%d", State.current_page, State.get_total_pages())
+
+	api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
 end
 
-function M.open_clipboard_window()
-	local clipboard = state.get_clipboard()
-	if #clipboard == 0 then
-		print("Clipboard is empty!")
+local function setup_buffer_keymaps(bufnr, winnr)
+	local keymaps = {
+		{
+			"n",
+			"q",
+			function()
+				api.nvim_win_close(winnr, true)
+			end,
+		},
+		{
+			"n",
+			"h",
+			function()
+				UI.navigate_page(winnr, bufnr, -1)
+			end,
+		},
+		{
+			"n",
+			"l",
+			function()
+				UI.navigate_page(winnr, bufnr, 1)
+			end,
+		},
+		{
+			"n",
+			"<CR>",
+			function()
+				UI.paste_selected(winnr)
+			end,
+		},
+	}
+
+	-- Add number keymaps
+	for i = 1, Config.items_per_page do
+		table.insert(keymaps, {
+			"n",
+			tostring(i),
+			function()
+				UI.paste_and_close(winnr, i)
+			end,
+		})
+	end
+
+	-- Apply keymaps
+	for _, map in ipairs(keymaps) do
+		keymap.set(map[1], map[2], map[3], {
+			buffer = bufnr,
+			noremap = true,
+			silent = true,
+		})
+	end
+end
+
+function UI.open_window()
+	if #State.clipboard == 0 then
+		notify("Clipboard is empty!", log_levels.INFO)
 		return
 	end
 
-	local buffer = vim.api.nvim_create_buf(false, true)
-	local win = vim.api.nvim_open_win(buffer, true, FLOAT_OPTS)
+	local bufnr = api.nvim_create_buf(false, true)
+	local winnr = api.nvim_open_win(bufnr, true, create_window_options())
 
-	vim.api.nvim_buf_set_option(buffer, "relativenumber", false)
-	vim.api.nvim_buf_set_option(buffer, "number", false)
+	-- Configure buffer
+	api.nvim_buf_set_option(bufnr, "relativenumber", false)
+	api.nvim_buf_set_option(bufnr, "number", false)
 
-	render_content(buffer, state.get_start_index())
+	render_content(bufnr)
+	setup_buffer_keymaps(bufnr, winnr)
+end
 
-	vim.api.nvim_buf_set_keymap(
-		buffer,
-		"n",
-		"q",
-		":lua vim.api.nvim_win_close(" .. win .. ", true)<CR>",
-		{ noremap = true, silent = true }
-	)
-	vim.api.nvim_buf_set_keymap(
-		buffer,
-		"n",
-		"h",
-		":lua require('lazyclip.ui').prev_page(" .. win .. ", " .. buffer .. ")<CR>",
-		{ noremap = true, silent = true }
-	)
-	vim.api.nvim_buf_set_keymap(
-		buffer,
-		"n",
-		"l",
-		":lua require('lazyclip.ui').next_page(" .. win .. ", " .. buffer .. ")<CR>",
-		{ noremap = true, silent = true }
-	)
-	vim.api.nvim_buf_set_keymap(
-		buffer,
-		"n",
-		"<CR>",
-		":lua require('lazyclip.ui').paste_selected(" .. win .. ")<CR>",
-		{ noremap = true, silent = true }
-	)
-
-	for i = 1, ITEMS_PER_PAGE do
-		local key = tostring(i)
-		vim.api.nvim_buf_set_keymap(
-			buffer,
-			"n",
-			key,
-			string.format(":lua require('lazyclip.ui').paste_and_close(%d, %d)<CR>", win, i),
-			{ noremap = true, silent = true }
-		)
+function UI.navigate_page(_, bufnr, direction)
+	if State.navigate_page(direction) then
+		render_content(bufnr)
 	end
 end
 
-function M.paste_and_close(win, index)
-	local clipboard = state.get_clipboard()
-	local start_idx = state.get_start_index()
-	local actual_idx = start_idx + index - 1
-
-	if clipboard[actual_idx] then
-		vim.api.nvim_win_close(win, true)
-		vim.api.nvim_paste(clipboard[actual_idx], false, -1)
+function UI.paste_and_close(winnr, index)
+	local item = State.get_item_at_index(index)
+	if item then
+		api.nvim_win_close(winnr, true)
+		api.nvim_paste(item, false, -1)
 	else
-		print("Invalid index!")
+		notify("Invalid index!", log_levels.WARN)
 	end
 end
 
-function M.prev_page(win, buffer)
-	if state.prev_page() then
-		render_content(buffer, state.get_start_index())
-	end
-end
-
-function M.next_page(win, buffer)
-	if state.next_page() then
-		render_content(buffer, state.get_start_index())
-	end
-end
-
-function M.paste_selected(win)
-	local cursor = vim.api.nvim_win_get_cursor(win)
+function UI.paste_selected(winnr)
+	local cursor = api.nvim_win_get_cursor(winnr)
 	local line = cursor[1]
+	local item = State.get_item_at_index(line)
 
-	local start_idx = state.get_start_index()
-	local actual_idx = start_idx + line - 1
-
-	local clipboard = state.get_clipboard()
-	if clipboard[actual_idx] then
-		vim.api.nvim_win_close(win, true)
-		vim.api.nvim_paste(clipboard[actual_idx], false, -1)
+	if item then
+		api.nvim_win_close(winnr, true)
+		api.nvim_paste(item, false, -1)
 	else
-		print("Invalid selection!")
+		notify("Invalid selection!", log_levels.WARN)
 	end
 end
 
-return M
+return UI
