@@ -92,7 +92,7 @@ local function create_window_options()
 	local editor_width = vim.o.columns
 	local editor_height = vim.o.lines
 
-	local row = math.floor((editor_height - win_height) / 2) - 2
+	local row = math.floor((editor_height - win_height) / 2) - 1
 	local col = math.floor((editor_width - win_width) / 2)
 
 	return {
@@ -270,35 +270,35 @@ local function setup_buffer_keymaps(bufnr, winnr, preview_bufnr)
 	local keymaps = {
 		{
 			"n",
-			"q",
+			Config.keymaps.close_window,
 			function()
 				UI.close_windows(winnr)
 			end,
 		},
 		{
 			"n",
-			"h",
+			Config.keymaps.prev_page,
 			function()
 				UI.navigate_page(winnr, bufnr, -1)
 			end,
 		},
 		{
 			"n",
-			"l",
+			Config.keymaps.next_page,
 			function()
 				UI.navigate_page(winnr, bufnr, 1)
 			end,
 		},
 		{
 			"n",
-			"<CR>",
+			Config.keymaps.paste_selected,
 			function()
 				UI.paste_selected(winnr)
 			end,
 		},
 		{
 			"n",
-			"j",
+			Config.keymaps.move_down,
 			function()
 				api.nvim_command("normal! j")
 				update_preview()
@@ -306,7 +306,7 @@ local function setup_buffer_keymaps(bufnr, winnr, preview_bufnr)
 		},
 		{
 			"n",
-			"k",
+			Config.keymaps.move_up,
 			function()
 				api.nvim_command("normal! k")
 				update_preview()

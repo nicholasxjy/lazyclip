@@ -32,15 +32,17 @@ https://github.com/user-attachments/assets/80bcd017-0657-43f7-8f85-509f687eaad7
 
 ```lua
 return {
-    {
         "atiladefreitas/lazyclip",
         config = function()
-            require("lazyclip").setup()
+            require("lazyclip").setup({
+                -- your custom config here (optional)
+            })
         end,
         keys = {
-            { "<leader>Cw", ":lua require('lazyclip').show_clipboard()<CR>", desc = "Open Clipboard Manager" },
+            { "Cw", desc = "Open Clipboard Manager" },
         },
-    },
+        -- Optional: Load plugin when yanking text
+        event = { "TextYankPost" },
 }
 ```
 
@@ -48,6 +50,36 @@ Run the following commands in Neovim to install LazyClip:
 
 ```vim
 :Lazy sync
+```
+
+### Default Configuration
+
+LazyClip comes with sensible defaults that you can override:
+
+```lua
+{
+    -- Core settings
+    max_history = 100,      -- Maximum number of items to keep in history
+    items_per_page = 9,     -- Number of items to show per page
+    
+    -- Window appearance
+    window = {
+        relative = "editor",
+        width = 70,         -- Width of the floating window
+        height = 12,        -- Height of the floating window
+        border = "rounded", -- Border style
+    },
+    
+    -- Internal keymaps for the lazyclip window
+    keymaps = {
+        close_window = "q",      -- Close the clipboard window
+        prev_page = "h",         -- Go to previous page
+        next_page = "l",         -- Go to next page
+        paste_selected = "", -- Paste the selected item
+        move_up = "k",           -- Move selection up
+        move_down = "j"          -- Move selection down
+    }
+}
 ```
 
 ---
@@ -99,7 +131,7 @@ Planned features and improvements for future versions of LazyClip:
 
 #### Quality of Life
 
-- [ ] Keybinding Configurability.
+- [x] Keybinding Configurability.
 - [ ] Better Error Messages.
 - [ ] Performance Optimization.
 
@@ -114,8 +146,6 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## 🔖 Versioning
 
 We use [Semantic Versioning](https://semver.org/) for versioning. For the available versions, see the [tags on this repository](https://github.com/atiladefreitas/lazyclip/tags).
-
-### Current Version: **v0.1.0**
 
 ---
 

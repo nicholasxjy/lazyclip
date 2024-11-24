@@ -1,9 +1,16 @@
 local M = {}
 
 function M.setup(opts)
+	local config = require("lazyclip.config")
+
 	if opts then
-		local config = require("lazyclip.config")
+		-- Deep merge the entire configuration
 		config = vim.tbl_deep_extend("force", config, opts)
+
+		-- Special handling for keymaps to allow partial override
+		if opts.keymaps then
+			config.keymaps = vim.tbl_deep_extend("force", config.keymaps, opts.keymaps)
+		end
 	end
 
 	-- Set default keybinding
@@ -11,7 +18,7 @@ function M.setup(opts)
 		"n",
 		"<leader>Cw",
 		":lua require('lazyclip.ui').open_window()<CR>",
-		{ noremap = true, silent = true }
+		{ noremap = true, silent = true, desc = "Open Clipboard Manager" }
 	)
 end
 

@@ -7,6 +7,14 @@ local Config = {
 		height = 12,
 		border = "rounded",
 	},
+	keymaps = {
+		close_window = "q",
+		prev_page = "h",
+		next_page = "l",
+		paste_selected = "<CR>",
+		move_up = "k",
+		move_down = "j",
+	},
 }
 
 function Config.get_window_position()
