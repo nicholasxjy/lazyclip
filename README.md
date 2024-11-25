@@ -1,10 +1,4 @@
 
-<!-- badges: start -->
-[![GitHub license](https://badgen.net/github/license/atiladefreitas/lazyclip)](https://github.com/atiladefreitas/lazyclip/blob/main/LICENSE)
-[![GitHub tag](https://badgen.net/github/tag/atiladefreitas/lazyclip?cache=clear)](https://github.com/atiladefreitas/lazyclip/tags/)
-<!-- badges: end -->
-
-
 # LazyClip
 
 LazyClip is a powerful yet minimalist clipboard manager for Neovim, designed with simplicity and efficiency in mind. It integrates seamlessly with your Neovim setup and provides an intuitive floating window to browse and paste clipboard history. LazyClip is especially crafted for users of **Lazy.nvim** and works great with popular Neovim distributions.
