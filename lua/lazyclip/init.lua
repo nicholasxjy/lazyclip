@@ -1,7 +1,12 @@
 local M = {}
 
 function M.setup(opts)
-	local config = require("lazyclip.config")
+	if opts then
+		local config = require("lazyclip.config")
+		config = vim.tbl_deep_extend("force", config, opts)
+	end
+
+	require("lazyclip.state").init()
 
 	if opts then
 		-- Deep merge the entire configuration

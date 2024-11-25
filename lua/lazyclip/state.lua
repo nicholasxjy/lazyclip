@@ -7,6 +7,20 @@ local State = {
 	current_page = 1,
 }
 
+function State.init()
+	-- Create the TextYankPost autocmd
+	vim.api.nvim_create_autocmd("TextYankPost", {
+		callback = function()
+			State.add_item(vim.fn.getreg('"'))
+		end,
+	})
+
+	local current = vim.fn.getreg('"')
+	if current and current ~= "" then
+		State.add_item(current)
+	end
+end
+
 function State.add_item(item)
 	if not item or item == "" then
 		return
