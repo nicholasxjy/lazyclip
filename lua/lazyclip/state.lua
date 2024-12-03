@@ -17,7 +17,7 @@ function State.init()
 end
 
 function State.add_item(item)
-	if not item or item == "" then
+	if not item or item == "" or #item <= Config.min_chars then
 		return
 	end
 
@@ -95,6 +95,23 @@ function State.get_item_at_index(index)
 	local start_idx = (State.current_page - 1) * Config.items_per_page + 1
 	local actual_idx = start_idx + index - 1
 	return State.clipboard[actual_idx], State.timestamps[actual_idx]
+end
+
+function State.delete_item(index)
+	local actual_idx = (State.current_page - 1) * Config.items_per_page + index
+	if State.clipboard[actual_idx] then
+		local item = table.remove(State.clipboard, actual_idx)
+		table.remove(State.timestamps, actual_idx)
+		State.copy_counts[item] = nil
+
+		-- Adjust current page if it becomes empty
+		local total_pages = State.get_total_pages()
+		if State.current_page > total_pages then
+			State.current_page = math.max(1, total_pages)
+		end
+		return true
+	end
+	return false
 end
 
 -- Setup TextYankPost autocmd

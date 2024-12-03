@@ -314,6 +314,25 @@ local function setup_buffer_keymaps(bufnr, winnr, preview_bufnr)
 		},
 	}
 
+	keymap.set("n", "d", function()
+		local cursor = api.nvim_win_get_cursor(winnr)
+		local line = cursor[1]
+		if State.delete_item(line) then
+			render_content(bufnr)
+			-- Update preview if items remain
+			local item = State.get_item_at_index(line)
+			if item then
+				setup_preview_buffer(preview_bufnr, item)
+			else
+				setup_preview_buffer(preview_bufnr, "")
+			end
+		end
+	end, {
+		buffer = bufnr,
+		noremap = true,
+		silent = true,
+	})
+
 	for i = 1, Config.items_per_page do
 		table.insert(keymaps, {
 			"n",

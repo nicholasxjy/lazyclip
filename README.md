@@ -55,6 +55,7 @@ LazyClip comes with sensible defaults that you can override:
     -- Core settings
     max_history = 100,      -- Maximum number of items to keep in history
     items_per_page = 9,     -- Number of items to show per page
+    min_chars = 5,          -- Minimum characters required to store item
     
     -- Window appearance
     window = {
@@ -71,26 +72,11 @@ LazyClip comes with sensible defaults that you can override:
         next_page = "l",         -- Go to next page
         paste_selected = "", -- Paste the selected item
         move_up = "k",           -- Move selection up
-        move_down = "j"          -- Move selection down
+        move_down = "j",         -- Move selection down
+        delete_item = "d"        -- Delete selected item
     }
 }
 ```
-
----
-
-## 🔑 Keybindings
-
-LazyClip comes with intuitive keybindings:
-
-| Key      | Action                                      |
-|----------|---------------------------------------------|
-| `<leader>Cw` | Open the clipboard manager window          |
-| `1-9`    | Paste the corresponding clipboard item      |
-| `<Enter>`| Paste the currently selected item           |
-| `h`      | Go to the previous page of clipboard history |
-| `l`      | Go to the next page of clipboard history     |
-| `q`      | Close the clipboard manager window          |
-
 ---
 
 ## 🛠️ Usage

@@ -1,6 +1,7 @@
 local Config = {
 	max_history = 100,
 	items_per_page = 9,
+	min_chars = 5,
 	window = {
 		relative = "editor",
 		width = 70,
@@ -14,6 +15,7 @@ local Config = {
 		paste_selected = "<CR>",
 		move_up = "k",
 		move_down = "j",
+		delete_item = "d",
 	},
 }
 
