@@ -96,13 +96,13 @@ local function create_window_options()
 	local col = math.floor((editor_width - win_width) / 2)
 
 	return {
-		relative = "editor",
+		relative = Config.window.relative,
 		width = win_width,
 		height = win_height,
 		col = col,
 		row = row,
 		style = "minimal",
-		border = "rounded",
+		border = Config.window.border,
 		title = " Clipboard ",
 		title_pos = "center",
 	}
@@ -111,13 +111,13 @@ end
 local function create_preview_window_options(main_win_pos)
 	local preview_height = math.floor(vim.o.lines * 0.2)
 	return {
-		relative = "editor",
+		relative = Config.window.relative,
 		width = Config.window.width,
 		height = preview_height,
 		col = main_win_pos.col,
 		row = main_win_pos.row + Config.window.height + 1,
 		style = "minimal",
-		border = "rounded",
+		border = Config.window.border,
 		title = " Preview ",
 		title_pos = "center",
 	}

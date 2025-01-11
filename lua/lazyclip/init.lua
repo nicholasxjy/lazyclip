@@ -1,18 +1,9 @@
+local Config = require("lazyclip.config")
 local M = {}
 
 function M.setup(opts)
-	local config = require("lazyclip.config")
-	config = vim.tbl_deep_extend("force", config, opts or {})
-
+	Config = vim.tbl_deep_extend("force", Config, opts or {})
 	require("lazyclip.state").init()
-
-	-- Set default keybinding
-	-- vim.keymap.set(
-	-- 	"n",
-	-- 	"<leader>Cw",
-	-- 	":lua require('lazyclip.ui').open_window()<CR>",
-	-- 	{ noremap = true, silent = true, desc = "Open Clipboard Manager" }
-	-- )
 end
 
 -- Add the show_clipboard function for backward compatibility
