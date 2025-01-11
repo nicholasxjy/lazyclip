@@ -10,6 +10,7 @@ local State = {
 function State.init()
 	-- Create the TextYankPost autocmd
 	vim.api.nvim_create_autocmd("TextYankPost", {
+		group = vim.api.nvim_create_augroup("LazyclipCmdGroup", { clear = true }),
 		callback = function()
 			State.add_item(vim.fn.getreg('"'))
 		end,
@@ -115,10 +116,10 @@ function State.delete_item(index)
 end
 
 -- Setup TextYankPost autocmd
-vim.api.nvim_create_autocmd("TextYankPost", {
-	callback = function()
-		State.add_item(vim.fn.getreg('"'))
-	end,
-})
+-- vim.api.nvim_create_autocmd("TextYankPost", {
+-- 	callback = function()
+-- 		State.add_item(vim.fn.getreg('"'))
+-- 	end,
+-- })
 
 return State
